@@ -2,9 +2,10 @@ import React from "react";
 import PokemonPage from "./PokemonPage";
 
 function App() {
+  const url = "http://localhost:3001/pokemon";
   return (
     <div className="App">
-      <PokemonPage />
+      <PokemonPage url={url} />
     </div>
   );
 }
