@@ -5,26 +5,32 @@ import Search from "./Search";
 import { Container, FormInput } from "semantic-ui-react";
 
 function PokemonPage({ url }) {
+  // Initial Render
+  useEffect(() => {
+    fetch(url)
+      .then((res) => res.json())
+      .then((pokemon) => setPokemonList(pokemon));
+  }, []);
+
+  //States
   const [pokemonList, setPokemonList] = useState([]);
   const [search, setSearch] = useState("");
   const [sortProp, setSortProp] = useState("id");
   const [ascendSort, setAscendSort] = useState(true);
-
-  const formOutline = {
+  const [form, setForm] = useState({
     name: "",
     hp: "",
     frontUrl: "",
     backUrl: "",
-  };
-  const [form, setForm] = useState(formOutline);
+  });
 
+  // Handlers
   const handleSort = (e) => {
     setSortProp(e.target.id);
   };
   const handleAscend = () => {
     ascendSort ? setAscendSort((prev) => !prev) : setAscendSort(true);
   };
-
   const handleSearch = (e) => {
     setSearch(e.target.value);
   };
@@ -49,15 +55,15 @@ function PokemonPage({ url }) {
       .then((newPokemon) => {
         setPokemonList((prev) => [newPokemon, ...prev]);
       });
-    setForm(formOutline);
+    setForm({
+      name: "",
+      hp: "",
+      frontUrl: "",
+      backUrl: "",
+    });
   };
 
-  useEffect(() => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((pokemon) => setPokemonList(pokemon));
-  }, []);
-
+  //Filters with search and sorts with tool located in PokemonForm
   const modifiedPokemonList = pokemonList
     .filter((pokemon) =>
       pokemon.name.toLowerCase().includes(search.toLowerCase())
@@ -77,9 +83,11 @@ function PokemonPage({ url }) {
       <h1>Pokemon Searcher</h1>
       <br />
       <PokemonForm
+        // Form handles
         handleFormInput={handleFormInput}
         handleFormSubmit={handleFormSubmit}
         form={form}
+        // Sort handles
         handleSort={handleSort}
         handleAscend={handleAscend}
         ascendSort={ascendSort}
@@ -87,12 +95,7 @@ function PokemonPage({ url }) {
       <br />
       <Search handleSearch={handleSearch} search={search} />
       <br />
-      <PokemonCollection
-        pokemonList={pokemonList}
-        search={search}
-        modifiedPokemonList={modifiedPokemonList}
-        sortProp={sortProp}
-      />
+      <PokemonCollection modifiedPokemonList={modifiedPokemonList} />
     </Container>
   );
 }

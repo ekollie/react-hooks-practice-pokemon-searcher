@@ -5,6 +5,8 @@ function PokemonForm({
   handleFormInput,
   handleFormSubmit,
   form,
+
+  // sort handles
   handleSort,
   handleAscend,
   ascendSort,
@@ -54,6 +56,8 @@ function PokemonForm({
         </Form.Group>
         <Form.Button>Submit</Form.Button>
       </Form>
+
+      {/* Sort Tool*/}
       <h3>Sort by:</h3>
       <button onClick={handleSort} id="id">
         id
